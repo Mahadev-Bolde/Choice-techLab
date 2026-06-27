@@ -27,7 +27,7 @@ const EmployeeTable = ({ employees, onViewEmployee }) => {
                 Name
               </th>
               {/* Email - always visible */}
-              <th className="px-2 md:px-4 py-3 text-left font-semibold text-gray-600 uppercase tracking-wider hidden xs:table-cell">
+              <th className="px-2 md:px-4 py-3 text-left font-semibold text-gray-600 uppercase tracking-wider  xs:table-cell">
                 Email
               </th>
               {/* Department - always visible */}

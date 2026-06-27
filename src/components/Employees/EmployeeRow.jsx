@@ -15,7 +15,7 @@ const EmployeeRow = ({ employee, onView }) => {
         {firstName} {lastName}
       </td>
       {/* Email - hide on extra small */}
-      <td className="px-2 md:px-4 py-2 md:py-3 text-xs md:text-sm text-gray-600 hidden xs:table-cell">
+      <td className="px-2 md:px-4 py-2 md:py-3 text-xs md:text-sm text-gray-600  xs:table-cell">
         <a
           href={`mailto:${email}`}
           className="hover:text-blue-600 hover:underline transition">

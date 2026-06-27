@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Employees/Header";
 import EmployeeTable from "../components/Employees/EmployeeTable";
@@ -95,6 +95,10 @@ const Employees = () => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
   };
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearch, department]);
 
   // Loading
   if (loading) {
