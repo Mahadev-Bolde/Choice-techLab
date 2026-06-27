@@ -1,20 +1,25 @@
 # Choice TechLab Employee Dashboard
 
-A React + Vite admin dashboard for managing employees. The app includes authentication, employee listing with search/filter/sort, employee detail view, and a form to add new employees locally.
+A React + Vite admin dashboard for managing employee records with authentication, search, filtering, sorting, pagination, and local persistence.
+
+## Overview
+
+This project is a small but complete employee management application built with React. It allows an admin to log in, view a list of employees, search and filter data, open employee details, and add new employees locally.
 
 ## Key Features
 
-- Admin login with hard-coded credentials
-- Protected dashboard routes using client-side auth
-- Employee list with:
+- Admin login with demo credentials
+- Protected routes for authenticated users only
+- Employee listing with:
   - Search by name or email
-  - Department filter
-  - Sort by name ascending/descending
+  - Department filtering
+  - Sorting by name in ascending or descending order
   - Pagination
-- View detailed employee profile
-- Add new employee form
-- Local caching in `localStorage`
-- Remote employee fetch from `https://dummyjson.com/users`
+- Employee detail view
+- Add employee form with validation
+- Local storage support for persistence
+- Remote data loading from DummyJSON
+- Debounced search for smoother filtering performance
 
 ## Tech Stack
 
@@ -24,15 +29,43 @@ A React + Vite admin dashboard for managing employees. The app includes authenti
 - Tailwind CSS v4
 - ESLint
 
+## Project Structure
+
+```text
+src/
+  App.jsx                # App routing and lazy-loaded pages
+  main.jsx               # Application entry point
+  components/
+    Loader.jsx
+    NotFound.jsx
+    ProtectedRoute.jsx
+    Employees/
+      EmployeeRow.jsx
+      EmployeeTable.jsx
+      Header.jsx
+  hooks/
+    useDebounce.js        # Custom debounce hook
+    useEmployees.js       # Employee data loading logic
+  pages/
+    AddEmployee.jsx      # Form to add a new employee
+    EmployeeDetails.jsx  # Employee profile page
+    Employees.jsx        # Dashboard page with filters and pagination
+    Login.jsx            # Admin login page
+  services/
+    employeeApi.js       # API helper functions
+  utils/
+    EmployeeHelpers.js   # Helper functions for status and UI formatting
+```
+
 ## Getting Started
 
-### Install dependencies
+### 1. Install dependencies
 
 ```bash
 npm install
 ```
 
-### Run the app
+### 2. Run the development server
 
 ```bash
 npm run dev
@@ -40,13 +73,13 @@ npm run dev
 
 Open the local URL shown in the terminal to view the app.
 
-### Build for production
+### 3. Build for production
 
 ```bash
 npm run build
 ```
 
-### Preview production build
+### 4. Preview the production build
 
 ```bash
 npm run preview
@@ -54,47 +87,36 @@ npm run preview
 
 ## Authentication
 
-The login page accepts the following admin credentials:
+Use the following demo credentials:
 
 - Email: `admin@test.com`
 - Password: `Admin@123`
 
-Successful login stores `isAuthenticated=true` in `localStorage` and grants access to protected routes.
+After a successful login, the app stores `isAuthenticated=true` in `localStorage` and grants access to the protected routes.
 
-## App Routes
+## Application Routes
 
-- `/` - Login page
-- `/employees` - Employee dashboard (protected)
-- `/employee/:id` - Employee detail page (protected)
-- `/employee/add` - Add employee form (protected)
-- `*` - Not found page
+- `/` — Login page
+- `/employees` — Employee dashboard (protected)
+- `/employee/:id` — Employee detail page (protected)
+- `/employee/add` — Add employee form (protected)
+- `*` — Not found page
 
 ## Data Flow
 
-- `src/hooks/useEmployees.js` loads employee data from `localStorage` first.
-- If no stored employees exist, it fetches from the remote API via `src/services/employeeApi.js`.
-- Fetched users are augmented with a computed status using `src/utils/EmployeeHelpers.js`.
-- New employees created via `AddEmployee.jsx` are saved to `localStorage`.
-- The details page loads fresh employee data from the remote API by ID.
+- The app first checks `localStorage` for existing employee data.
+- If no employees are stored, it fetches data from the DummyJSON API.
+- The fetched employees are processed and prepared for display using the helper utilities.
+- New employees added through the form are stored back in `localStorage` so they remain available on refresh.
 
-## Project Structure
+## Performance Optimization
 
-- `src/main.jsx` - React entry point with `BrowserRouter`
-- `src/App.jsx` - Route definitions and protected route wrappers
-- `src/pages/Login.jsx` - Login form and validation
-- `src/pages/Employees.jsx` - Employee list, filters, sorting, pagination
-- `src/pages/EmployeeDetails.jsx` - Employee profile page
-- `src/pages/AddEmployee.jsx` - New employee form
-- `src/components/ProtectedRoute.jsx` - Client-side route guard
-- `src/components/Employees/Header.jsx` - Dashboard header with add/logout actions
-- `src/components/Employees/EmployeeTable.jsx` - Table layout for employee rows
-- `src/components/Employees/EmployeeRow.jsx` - Single employee row with view button
-- `src/hooks/useEmployees.js` - Data loading and local cache management
-- `src/services/employeeApi.js` - API helper functions
-- `src/utils/EmployeeHelpers.js` - Status generation and badge styling helpers
+- Search input uses a debounce hook to reduce unnecessary re-renders and filtering operations.
+- Expensive derived values such as department options and filtered results are memoized with `useMemo`.
+- Routes are lazy-loaded to improve the initial load experience.
 
 ## Troubleshooting
 
-- If employee data does not load, check network access to `https://dummyjson.com/users`.
-- If login fails, confirm you are using the admin credentials above.
-- To reset the app, clear `localStorage` for the site in your browser.
+- If employee data does not load, check your network connection to `https://dummyjson.com/users`.
+- If login fails, verify that the demo credentials above are entered exactly.
+- To reset the app, clear the site data for this app in your browser and refresh the page.
