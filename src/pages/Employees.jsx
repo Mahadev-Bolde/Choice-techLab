@@ -5,8 +5,12 @@ import EmployeeTable from "../components/Employees/EmployeeTable";
 import { useEmployees } from "../hooks/useEmployees";
 import { useSearchParams } from "react-router-dom";
 
+// debounce custom hook
+import useDebounce from "../hooks/useDebounce";
+
 const Employees = () => {
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 500);
   const [department, setDepartment] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
   const [currentPage, setCurrentPage] = useState(1);
@@ -37,8 +41,8 @@ const Employees = () => {
     let result = employees;
 
     // Search filter
-    if (search.trim()) {
-      const query = search.toLowerCase().trim();
+    if (debouncedSearch.trim()) {
+      const query = debouncedSearch.toLowerCase().trim();
       result = result.filter((emp) => {
         const fullName =
           `${emp.firstName || ""} ${emp.lastName || ""}`.toLowerCase();
@@ -67,7 +71,7 @@ const Employees = () => {
     });
 
     return result;
-  }, [employees, search, department, sortOrder]);
+  }, [employees, debouncedSearch, department, sortOrder]);
 
   // Clear filters handler
   const clearFilters = () => {
